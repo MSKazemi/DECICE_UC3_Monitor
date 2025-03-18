@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+.venv/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ROS2
+log/
+build/
+install/
+
+# Kubernetes
+*.yaml~
+*.yml~
+
+# Docker
+*.dockerignore
+docker-compose.override.yml
+docker-compose.yml
+.docker/
+
+# Data & Logs
+data/*.json
+logs/
+*.log
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+.DS_Store
+Thumbs.db
+venv
+venv/
+env/

@@ -1,0 +1,11 @@
+# Web framework
+fastapi
+uvicorn
+
+# Prometheus Exporter
+prometheus_client
+
+# ROS2 Python Client Library (must be built from source)
+colcon-common-extensions
+setuptools
+wheel

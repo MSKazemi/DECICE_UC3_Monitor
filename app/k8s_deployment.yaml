@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uc3-monitoring
+  namespace: uc3  # Use the same namespace as your Ingress
+  labels:
+    app: uc3-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uc3-monitoring
+  template:
+    metadata:
+      labels:
+        app: uc3-monitoring
+    spec:
+      containers:
+        - name: uc3-exporter
+          image: kazemi/uc3-monitoring:latest  # Replace with your image
+          ports:
+            - containerPort: 8001
+          volumeMounts:
+            - name: data-volume
+              mountPath: /app/data  # Ensure JSON data is available in the container
+      volumes:
+        - name: data-volume
+          hostPath:
+            path: /mnt/data  # Change this based on where your JSON data is stored
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: uc3-monitoring-service
+  namespace: uc3  # Use the same namespace as your Ingress
+spec:
+  selector:
+    app: uc3-monitoring
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8001
+  type: ClusterIP  # Expose only inside the cluster (Ingress will handle external access)
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: uc3-monitoring-ingress
+  namespace: uc3
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: monitoring.uc3.local  # Change this to your desired domain
+      http:
+        paths:
+          - path: /metrics  # Expose Prometheus metrics at /metrics
+            pathType: Prefix
+            backend:
+              service:
+                name: uc3-monitoring-service
+                port:
+                  number: 80
