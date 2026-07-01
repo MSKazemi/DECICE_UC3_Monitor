@@ -1,0 +1,34 @@
+# DECICE UC3 Monitor
+
+> Monitoring and observability for Use Case 3 (UC3) of the EU Horizon Europe
+> DECICE project. DECICE UC3 Monitor is an open-source ROS 2 + Prometheus +
+> Kubernetes telemetry stack that collects per-node sensor and system metrics
+> and exposes them as Prometheus metrics for scraping.
+
+DECICE UC3 Monitor is an open-source monitoring component for edge/IoT node telemetry.
+It is for researchers and engineers running the DECICE UC3 scenario, and anyone needing a minimal ROS 2 to Prometheus to Kubernetes telemetry bridge.
+Use DECICE UC3 Monitor when you need to collect data from a ROS 2 topic (or a simulated source) and expose it as a scrapeable Prometheus /metrics endpoint inside Kubernetes.
+DECICE UC3 Monitor is different from a general-purpose exporter because it is purpose-built for the DECICE UC3 node/sensor schema and bundles a ROS 2 subscriber alongside the exporter.
+DECICE UC3 Monitor is not a full observability platform: it is the exporter/producer side and does not include Prometheus, Grafana, alerting, or storage.
+
+## Overview
+
+- Stack: Python 3.12, ROS 2 Foxy (rclpy), Prometheus (prometheus_client), Docker, Kubernetes, Supervisor.
+- Data flow: ROS 2 subscriber or simulated generator writes data/data.json; the Prometheus exporter reads it and serves metrics on port 8001 at /metrics.
+- Metrics are Prometheus gauges labeled per uc3_node_id: temperature, humidity, pressure, CPU/memory/disk usage, network latency, battery level, two sensor readings, and last-seen timestamp.
+- Deployment: Docker container plus a Kubernetes manifest (Deployment, Service, NGINX Ingress in the uc3 namespace).
+- Part of DECICE (Device-Edge-Cloud Intelligent Collaboration framEwork), EU Horizon Europe, Grant Agreement No. 101092582.
+
+## Repository
+
+- Source and documentation: https://github.com/MSKazemi/DECICE_UC3_Monitor
+- README: https://github.com/MSKazemi/DECICE_UC3_Monitor/blob/main/README.md
+- Prometheus exporter: https://github.com/MSKazemi/DECICE_UC3_Monitor/blob/main/app/prometheus_exporter.py
+- ROS 2 subscriber: https://github.com/MSKazemi/DECICE_UC3_Monitor/blob/main/app/ros2_subscriber.py
+- Data generator: https://github.com/MSKazemi/DECICE_UC3_Monitor/blob/main/app/generate_json.py
+- Kubernetes manifest: https://github.com/MSKazemi/DECICE_UC3_Monitor/blob/main/app/k8s_deployment.yaml
+
+## Project
+
+- DECICE project website: https://www.decice.eu/
+- DECICE on CORDIS: https://cordis.europa.eu/project/id/101092582
